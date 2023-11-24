@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Creater, GetData, Remover } from "../functions/product";
+import { Link } from "react-router-dom";
 
 const FormProducts = () => {
   const tam = "Michael dynamic";
@@ -11,8 +13,7 @@ const FormProducts = () => {
   }, []);
 
   const loadData = async () => {
-    await axios
-      .get("http://localhost:5000/api/product")
+    GetData()
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   };
@@ -28,8 +29,7 @@ const FormProducts = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(form);
-    await axios
-      .post("http://localhost:5000/api/product", form)
+    Creater(form)
       .then((res) => {
         console.log(res);
         loadData();
@@ -39,8 +39,7 @@ const FormProducts = () => {
 
   const handleRemove = async (id) => {
     console.log(id);
-    await axios
-      .delete(`http://localhost:5000/api/product/${id}`)
+    Remover(id)
       .then((res) => {
         console.log(res);
         loadData();
@@ -81,6 +80,8 @@ const FormProducts = () => {
             <th scope="col">name</th>
             <th scope="col">detail</th>
             <th scope="col">price</th>
+            <th scope="col">actions</th>
+            <th scope="col">edit</th>
           </tr>
         </thead>
         <tbody>
@@ -91,7 +92,11 @@ const FormProducts = () => {
                   <th scope="row">{item.name}</th>
                   <td>{item.detail}</td>
                   <td>{item.price}</td>
-                  <td onClick={() => handleRemove(item._id)}>DELETE </td>
+                  <td onClick={() => handleRemove(item._id)}>DELETE</td>
+
+                  <td>
+                    <Link to={"/edit/" + item._id}>Edit</Link>
+                  </td>
                 </tr>
               ))
             : null}
