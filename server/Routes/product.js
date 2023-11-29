@@ -9,8 +9,10 @@ const {
   remove,
 } = require("../controllers/product");
 
+const { auth } = require("../Middleware/auth");
+
 //http://localhost:5000/api/product
-router.get("/product", list);
+router.get("/product", auth, list);
 router.get("/product/:id", read);
 router.post("/product", create);
 router.put("/product/:id", update);
